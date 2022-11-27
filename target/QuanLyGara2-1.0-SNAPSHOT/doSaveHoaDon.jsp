@@ -13,7 +13,8 @@
     ArrayList<XeOto> listxe = (ArrayList<XeOto>) session.getAttribute("dsxe");
     ArrayList<DichVuSuDung> listdv = (ArrayList<DichVuSuDung>) session.getAttribute("dsdv");;
     ArrayList<LinhKienSuDung> listlk = (ArrayList<LinhKienSuDung>) session.getAttribute("dslk");
-    if((new HoaDonDAO()).saveHoaDon(listdv, listlk, listxe)){
+    ArrayList<HoaDon> hoaDons = (ArrayList<HoaDon>) session.getAttribute("hoadon");
+    if((new HoaDonDAO()).saveHoaDon(listdv, listlk, hoaDons)){
 
 %>
 <script type="text/javascript">

@@ -5,7 +5,6 @@
   Time: 10:18:15
   To change this template use File | Settings | File Templates.
 --%>
-<%@page import="dao.*" %>
 <%@page import="model.*" %>
 <%@page import="java.util.ArrayList" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
@@ -15,6 +14,7 @@
 <%
     ArrayList<ThanhVien> listkh = (ArrayList<ThanhVien>) session.getAttribute("dskhachhang");
     ArrayList<XeOto> listxe = (ArrayList<XeOto>) session.getAttribute("dsxe");
+    ArrayList<HoaDon> listhd = (ArrayList<HoaDon>) session.getAttribute("hoadon");
     ArrayList<DichVuSuDung> listdv = null;
     ArrayList<LinhKienSuDung> listlk = null;
 //Kiem tra cach trang nay bi goi
@@ -31,10 +31,12 @@
         ArrayList<LinhKien> listlk1 = (ArrayList<LinhKien>) session.getAttribute("listlk1");
         if (request.getParameter("iddv") != null) {
             boolean daTonTai = false;
-            for (DichVuSuDung dv : listdv) {
-                if (dv.getDichVu().getId() == Integer.parseInt(request.getParameter("iddv"))) {
-                    daTonTai = true;
-                    break;
+            if (listdv != null) {
+                for (DichVuSuDung dv : listdv) {
+                    if (dv.getDichVu().getId() == Integer.parseInt(request.getParameter("iddv"))) {
+                        daTonTai = true;
+                        break;
+                    }
                 }
             }
             if (!daTonTai) {
@@ -44,7 +46,11 @@
                         DichVuSuDung dichVuSuDung = new DichVuSuDung();
                         dichVuSuDung.setDichVu(dv);
                         dichVuSuDung.setSoLuong(1);
-                        listdv.add(dichVuSuDung);
+                        if(listdv == null){
+                            listdv = new ArrayList<>();
+                            listdv.add(dichVuSuDung);
+                        }
+                        else listdv.add(dichVuSuDung);
                     }
                 }
                 session.setAttribute("dsdv", listdv);
@@ -53,10 +59,12 @@
 
         if (request.getParameter("idlk") != null) {
             boolean daTonTai1 = false;
-            for (LinhKienSuDung lk : listlk) {
-                if (lk.getLinhKien().getId() == Integer.parseInt(request.getParameter("idlk"))) {
-                    daTonTai1 = true;
-                    break;
+            if (listlk != null) {
+                for (LinhKienSuDung lk : listlk) {
+                    if (lk.getLinhKien().getId() == Integer.parseInt(request.getParameter("idlk"))) {
+                        daTonTai1 = true;
+                        break;
+                    }
                 }
             }
             if (!daTonTai1) {
@@ -66,7 +74,11 @@
                         LinhKienSuDung linhKienSuDung = new LinhKienSuDung();
                         linhKienSuDung.setLinhKien(lk);
                         linhKienSuDung.setSoLuong(1);
-                        listlk.add(linhKienSuDung);
+                        if(listlk == null){
+                            listlk = new ArrayList<>();
+                            listlk.add(linhKienSuDung);
+                        }
+                        else listlk.add(linhKienSuDung);
                     }
                 }
                 session.setAttribute("dslk", listlk);
@@ -145,7 +157,7 @@
                 <th scope="col">Số điện thoại</th>
                 <th scope="col">Mô tả</th>
             </tr>
-            </thead>
+
 
             <%
                 if (listkh != null) {
@@ -172,7 +184,7 @@
         </table>
 
         <table>
-            <h4>Thông tin Xe Ô Tô</h4>
+            <h4>Thông Tin Xe Ô Tô</h4>
             <tr>
                 <th scope="col">STT</th>
                 <th scope="col">#ID</th>
@@ -181,7 +193,6 @@
                 <th scope="col">Hãng xe</th>
                 <th scope="col">Mô tả</th>
             </tr>
-            </thead>
             <%
                 if (listxe != null) {
                     for (int i = 0; i < listxe.size(); i++) {
@@ -220,7 +231,6 @@
                 <th scope="col">Thành tiền</th>
                 <th scope="col">Xóa<i class='fas fa-trash-alt'></i></th>
             </tr>
-            </thead>
 
             <tbody>
                 <%
@@ -306,12 +316,19 @@
                 %>
             <thead>
 
-            <tr>
-                <th scope="col" style="background-color: yellow;">Tổng tiền: <%=Math.round(tongTien)%></th>
+            <b style="background-color: yellow">Tổng tiền: <%=Math.round(tongTien)%>
+            </b>
+            <%
+                listhd.get(0).setTongTien(tongTien);
+                long millis = System.currentTimeMillis();
+                // creating a new object of the class Date
+                java.sql.Date date = new java.sql.Date(millis);
+                listhd.get(0).setThoiGian(date);
+                listhd.get(0).setMoTa("Đã thanh toán");
+                session.setAttribute("hoadon", listhd);
+            %>
 
-            </tr>
             </thead>
-            </tbody>
 
         </table>
 

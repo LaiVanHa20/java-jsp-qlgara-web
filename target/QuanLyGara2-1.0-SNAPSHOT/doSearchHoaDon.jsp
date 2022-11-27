@@ -13,18 +13,19 @@
     String maHoaDon = (String)request.getParameter("mahoadon");
 
     HoaDonDAO dao = new HoaDonDAO();
-    ArrayList<HoaDon> kq = dao.searchHoaDon(maHoaDon);
+    ArrayList<HoaDon> searchHoaDon = dao.searchHoaDon(maHoaDon);
 
     ArrayList<ThanhVien> listkh = (new KhachHangDAO()).getKhachHangTrongHD(maHoaDon);
     ArrayList<XeOto> listxe = (new XeOtoDAO()).getDSXeTrongHD(maHoaDon);
     ArrayList<DichVuSuDung> listdv = (new DichVuSDDAO()).getDSDichVuTrongHD(maHoaDon);
     ArrayList<LinhKienSuDung> listlk = (new LinhKienSDDAO()).getDSLinhKienTrongHD(maHoaDon);
 
-    if(kq.isEmpty() == false ){
+    if(searchHoaDon.isEmpty() == false ){
         session.setAttribute("dskhachhang", listkh);
         session.setAttribute("dsxe", listxe);
         session.setAttribute("dsdv", listdv);
         session.setAttribute("dslk", listlk);
+        session.setAttribute("hoadon", searchHoaDon);
         response.sendRedirect("gdChiTietHoaDon.jsp");
     }
     else {
