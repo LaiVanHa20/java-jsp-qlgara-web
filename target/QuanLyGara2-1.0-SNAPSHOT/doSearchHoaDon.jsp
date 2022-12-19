@@ -13,14 +13,14 @@
     String maHoaDon = (String)request.getParameter("mahoadon");
 
     HoaDonDAO dao = new HoaDonDAO();
-    ArrayList<HoaDon> searchHoaDon = dao.searchHoaDon(maHoaDon);
+    HoaDon searchHoaDon = dao.searchHoaDon(maHoaDon);
 
     ArrayList<ThanhVien> listkh = (new KhachHangDAO()).getKhachHangTrongHD(maHoaDon);
-    ArrayList<XeOto> listxe = (new XeOtoDAO()).getDSXeTrongHD(maHoaDon);
+    ArrayList<XeOto> listxe = (new XeOtoDAO()).getXeTrongHD(maHoaDon);
     ArrayList<DichVuSuDung> listdv = (new DichVuSDDAO()).getDSDichVuTrongHD(maHoaDon);
     ArrayList<LinhKienSuDung> listlk = (new LinhKienSDDAO()).getDSLinhKienTrongHD(maHoaDon);
 
-    if(searchHoaDon.isEmpty() == false ){
+    if(searchHoaDon.getId() != 0 ){
         session.setAttribute("dskhachhang", listkh);
         session.setAttribute("dsxe", listxe);
         session.setAttribute("dsdv", listdv);

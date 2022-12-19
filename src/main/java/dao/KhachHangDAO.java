@@ -34,15 +34,4 @@ public class KhachHangDAO extends DAO{
         }
         return kq;
     }
-
-    public static void main(String[] args) {
-        KhachHangDAO kh = new KhachHangDAO();
-        ArrayList<ThanhVien> list = new KhachHangDAO().getKhachHangTrongHD("HD00001");
-
-        for(ThanhVien x : list){
-            System.out.println(x.getHoTen());
-            System.out.println(x.getDiaChi());
-            System.out.println(x.getSdt());
-        }
-    }
 }

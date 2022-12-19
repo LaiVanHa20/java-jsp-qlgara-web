@@ -10,9 +10,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class XeOtoDAO extends DAO{
-    public ArrayList<XeOto> getDSXeTrongHD(String maHoaDon){
+    public ArrayList<XeOto> getXeTrongHD(String maHoaDon){
         ArrayList<XeOto> kq = null;
-        String sql = "{call getDSXeTrongHD(?)}";
+        String sql = "{call getXeTrongHD(?)}";
 
         try {
             CallableStatement cs = con.prepareCall(sql);

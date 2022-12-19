@@ -14,7 +14,7 @@
 <%
     ArrayList<ThanhVien> listkh = (ArrayList<ThanhVien>) session.getAttribute("dskhachhang");
     ArrayList<XeOto> listxe = (ArrayList<XeOto>) session.getAttribute("dsxe");
-    ArrayList<HoaDon> listhd = (ArrayList<HoaDon>) session.getAttribute("hoadon");
+    HoaDon hoaDon = (HoaDon) session.getAttribute("hoadon");
     ArrayList<DichVuSuDung> listdv = null;
     ArrayList<LinhKienSuDung> listlk = null;
 //Kiem tra cach trang nay bi goi
@@ -253,7 +253,7 @@
                     <form name="nhapsoluong"
                           action="gdChiTietHoaDon.jsp?action=sua&&iddv=<%=listdv.get(i).getDichVu().getId()%>"
                           method="post" class="nhap_so_luong">
-                        <input type="number" name="soluong" placeholder="<%=listdv.get(i).getSoLuong()%>">
+                        <input type="number" min="1" name="soluong" placeholder="<%=listdv.get(i).getSoLuong()%>">
                         <button type="submit">Lưu</button>
                     </form>
 
@@ -293,7 +293,7 @@
                     <form name="nhapsoluong"
                           action="gdChiTietHoaDon.jsp?action=sua&&idlk=<%=listlk.get(i).getLinhKien().getId()%>"
                           method="post" class="nhap_so_luong">
-                        <input type="number" name="soluong" placeholder="<%=listlk.get(i).getSoLuong()%>">
+                        <input type="number" min="1" name="soluong" placeholder="<%=listlk.get(i).getSoLuong()%>">
                         <button type="submit">Lưu</button>
                     </form>
                 </td>
@@ -319,13 +319,13 @@
             <b style="background-color: yellow">Tổng tiền: <%=Math.round(tongTien)%>
             </b>
             <%
-                listhd.get(0).setTongTien(tongTien);
+                hoaDon.setTongTien(tongTien);
                 long millis = System.currentTimeMillis();
                 // creating a new object of the class Date
                 java.sql.Date date = new java.sql.Date(millis);
-                listhd.get(0).setThoiGian(date);
-                listhd.get(0).setMoTa("Đã thanh toán");
-                session.setAttribute("hoadon", listhd);
+                hoaDon.setThoiGian(date);
+                hoaDon.setMoTa("Đã thanh toán");
+                session.setAttribute("hoadon", hoaDon);
             %>
 
             </thead>

@@ -92,7 +92,7 @@
                 <%
                     if (request.getParameter("err") != null && request.getParameter("err").equalsIgnoreCase("fail"))
                 %> <h4 style="color: red">Không tìm thấy linh kiện dịch vụ nào!</h4><%
-            %>
+                %>
                 <input class="btn btn-primary" style="margin: 20px" type="submit" value="Tìm Kiếm"
                        name="btnTimkiemDVLK">
                 <input class="btn btn-success" style="margin: 20px" type="button"

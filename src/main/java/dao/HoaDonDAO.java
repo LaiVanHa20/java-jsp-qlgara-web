@@ -11,30 +11,29 @@ import java.util.Date;
 
 public class HoaDonDAO extends DAO{
 
-    public ArrayList<HoaDon> searchHoaDon(String key) {
-        ArrayList<HoaDon> result = new ArrayList<HoaDon>();
+    public HoaDon searchHoaDon(String key) {
         String sql = "SELECT * FROM tblhoadon WHERE mahoadon = ?";
+        HoaDon hd = new HoaDon();
         try{
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, key);
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()){
-                HoaDon hd = new HoaDon();
+            if(rs.next()){
                 hd.setId(rs.getInt("id"));
                 hd.setMaHoaDon(rs.getString("mahoadon"));
                 hd.setThoiGian(rs.getDate("thoigian"));
                 hd.setTongTien(rs.getFloat("tongtien"));
                 hd.setMoTa(rs.getString("mota"));
-                result.add(hd);
             }
         }catch(Exception e){
             e.printStackTrace();
         }
-        return result;
+        return hd;
     }
 
-    public boolean saveHoaDon(ArrayList<DichVuSuDung> listdv, ArrayList<LinhKienSuDung> listlk, ArrayList<HoaDon> hoaDons){
+
+    public boolean saveHoaDon(ArrayList<DichVuSuDung> listdv, ArrayList<LinhKienSuDung> listlk, HoaDon hoaDon){
         if(listdv.size()==0  && listlk.size()==0) return false;
         boolean kq = false;
         String sqlXoa = "DELETE FROM tbldichvusd dvsd WHERE dvsd.tblXeDuocSuaId = ?";
@@ -45,8 +44,8 @@ public class HoaDonDAO extends DAO{
         try{
             con.setAutoCommit(false);
             //xoa het dich vu su dung cu
-                ArrayList<XeDuocSua> xeDuocSua = getTTXeDuocSua(hoaDons.get(0).getMaHoaDon());
-                int idxeds = xeDuocSua.get(0).getId();
+            int idxeds = getTTXeDuocSua(hoaDon.getMaHoaDon());
+
                 PreparedStatement psXoa = con.prepareStatement(sqlXoa);
                 psXoa.setInt(1, idxeds);
                 psXoa.executeUpdate();
@@ -78,17 +77,17 @@ public class HoaDonDAO extends DAO{
             }
             //update hoa don
             PreparedStatement psUpdate = con.prepareStatement(sqlUpdateHD);
-            psUpdate.setDate(1, (java.sql.Date) hoaDons.get(0).getThoiGian());
-            psUpdate.setFloat(2, hoaDons.get(0).getTongTien());
-            psUpdate.setString(3, hoaDons.get(0).getMoTa());
-            psUpdate.setString(4, hoaDons.get(0).getMaHoaDon());
+            psUpdate.setDate(1, (java.sql.Date) hoaDon.getThoiGian());
+            psUpdate.setFloat(2, hoaDon.getTongTien());
+            psUpdate.setString(3, hoaDon.getMoTa());
+            psUpdate.setString(4, hoaDon.getMaHoaDon());
             psUpdate.executeUpdate();
 
-            con.commit();//cmt dong nay ney chay che do JUnit test
+             con.commit();//cmt dong nay ney chay che do JUnit test
             kq=true;
         }catch(Exception e){
             try{
-                con.rollback();//cmt dong nay ney chay che do JUnit test
+                 con.rollback();//cmt dong nay ney chay che do JUnit test
             }catch(Exception ee){
                 kq=false;
                 ee.printStackTrace();
@@ -105,7 +104,7 @@ public class HoaDonDAO extends DAO{
         return kq;
     }
 
-    public ArrayList<XeDuocSua> getTTXeDuocSua(String maHoaDon){
+    public Integer getTTXeDuocSua(String maHoaDon){
         ArrayList<XeDuocSua> kq = null;
         String sql = "{call getDSXeTrongHD(?)}";
 
@@ -122,6 +121,6 @@ public class HoaDonDAO extends DAO{
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return kq;
+        return kq.get(0).getId();
     }
 }
